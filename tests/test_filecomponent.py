@@ -1,39 +1,38 @@
 import os
+import shutil
+
+from unittest import TestCase
 from parameterized import parameterized
-from pyfakefs.fake_filesystem_unittest import TestCase
 
 from zygoat.components import FileComponent
 from zygoat.components import resources
+from zygoat.cli import _new
+from zygoat.utils.files import use_dir
 
 
-ZG_PATH = os.path.join(os.getcwd(), '../..')
-print(ZG_PATH)
-FILENAME = '.editorconfig'
-PKG = resources
-
-
-def create_fc(base):
-    component = FileTestComponent()
-    component.filename = FILENAME
-    component.resource_pkg = PKG
-    component.base_path = base
-    return component
+PATH = '/tmp/test-zg/'
 
 
 class TestFileComponent(TestCase):
-    def setUp(self):
-        self.setUpPyfakefs()
 
-    @parameterized.expand([
-        ('./',),
-        ('frontend/',),
-    ])
-    def test_creation(self, base):
-        comp = create_fc(base)
-        os.listdir(os.path.join(ZG_PATH, base))
-        comp.create()
-        path = os.path.join(ZG_PATH, base, FILENAME)
-        print(path)
-        os.listdir(os.path.join(ZG_PATH, base))
-        self.assertTrue(os.path.exists(path))
-        self.assertFalse(os.stat(path).st_size == 0)
+    @classmethod
+    def setUpClass(cls):
+        try:
+            os.mkdir(PATH)
+            os.mknod(os.path.join(PATH, '.git'))
+            with use_dir(PATH):
+                _new('test')
+        except:
+            # Make sure the directory gets removed if there's an error
+            # on setup (tearDownClass won't get called automatically if
+            # setUpClass fails).
+            cls.tearDownClass()
+            raise
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(PATH)
+
+    def test_creation(self):
+        print(os.listdir(PATH))
+        raise AssertionError

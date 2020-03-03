@@ -26,6 +26,9 @@ def init():
 @cli.command(help='Creates a new settings file and all components')
 @click.argument('project_name')
 def new(project_name):
+    _new(project_name)
+
+def _new(project_name):
     log.debug(f'Attempting creation of {click.style(project_name, bold=True)}')
 
     config = Config()
