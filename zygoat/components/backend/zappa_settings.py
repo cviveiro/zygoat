@@ -11,17 +11,21 @@ log = logging.getLogger()
 
 zappa_prompts = {
     "aws_region": "us-east-1",
-    "apigateway_policy": "allow-from-anywhere.json",
-    "django_settings": "backend.settings",
     "profile_name": "default",
-    "project_name": "backend",
-    "runtime": "python3.7",
     "slim_handler": False,
     "s3_bucket": None,
     "timeout_seconds": 30,
     "certificate_arn": None,
     "domain": None,
     "vpc_config": {"SubnetIds": [None], "SecurityGroupIds": [None],},
+}
+
+
+zappa_settings = {
+    "django_settings": "backend.settings",
+    "project_name": ,
+    # TODO how match runtimes, or at least raise an error
+    "runtime": "python3.7",
 }
 
 

@@ -25,4 +25,4 @@ class BaseDeployment(Component):
 
     @property
     def commit_hash(self):
-        return subprocess.check_output("git rev-parse HEAD", shell=True).decode().strip()
+        return run("git rev-parse HEAD", shell=True).decode().strip()
